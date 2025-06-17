@@ -40,7 +40,7 @@ def time_stamp():
 def weibo():
     try:
         time.sleep(random.randint(10, 20))  # 随机等待10到20秒
-        response = requests.get(URL_WEIBO_XIANG, headers=HEADERS_WEIBO)
+        response = requests.get(URL_WEIBO_HOME, headers=HEADERS_WEIBO)
         response_json = json.loads(response.text)
 
         str_time = time_stamp()
