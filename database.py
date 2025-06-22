@@ -5,8 +5,8 @@ class DataBase:
     connection = pymysql.connect(
         host='localhost',
         user='root',
-        password='root',  # 替换为你的数据库密码
-        database='tiktok',  # 替换为你的数据库名称
+        password='root',  # replace with your database password
+        database='tiktok',  # replace with your database name
         charset='utf8mb4',
     )
     cursor = connection.cursor()
@@ -20,27 +20,27 @@ class DataBase:
 
 
     def search_tiktok(self):
-        sql = "SELECT * FROM tiktok order by id desc limit 1"  # 替换为你的表名
+        sql = "SELECT * FROM tiktok order by id desc limit 1"  # replace with your table name
         self.cursor.execute(sql)
-        results = self.cursor.fetchone()  # 获取最后一行数据
-        return results  # 返回最后一行数据
+        results = self.cursor.fetchone()  # get last row data
+        return results  # return last row data
 
     def search_weibo(self):
-        sql = "SELECT * FROM weibo order by id desc limit 1"  # 替换为你的表名
+        sql = "SELECT * FROM weibo order by id desc limit 1"  # replace with your table name
         self.cursor.execute(sql)
-        results = self.cursor.fetchone()  # 获取最后一行数据
+        results = self.cursor.fetchone()  # get last row data
 
-        return results  # 返回最后一行数据
+        return results  # return last row data
     
     def insert_tiktok(self, data):
         sql = "INSERT INTO tiktok (粉丝数, 关注数, 获赞数, 作品数, 喜欢作品数, 时间) VALUES " + "(%s, %s, %s, %s, %s, %s)"
         self.cursor.execute(sql, data)
-        self.connection.commit()  # 提交事务
+        self.connection.commit()  # submit the transaction
 
     def insert_weibo(self, data):
         sql = "INSERT INTO weibo (总获赞数, 评论数, 获赞数, 粉丝数, 关注数, 微博数, 时间) VALUES " + "(%s, %s, %s, %s, %s, %s, %s)"
         self.cursor.execute(sql, data)
-        self.connection.commit() # 提交事务
+        self.connection.commit() # submit the transaction
 
 
 if __name__ == "__main__":
