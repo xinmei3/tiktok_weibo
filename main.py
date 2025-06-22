@@ -6,6 +6,10 @@ from database import DataBase
 import Email
 
 
+FILE_PATH = ''  # this is the path where you want to save the file
+FILE_TIKTOK_USER_INFO = 'tiktok_user_info.txt'
+FILE_WEIBO_USER_INFO = 'weibo_user_info.txt'
+
 USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36 Edg/136.0.0.0"
 COOKIE_TIKTOK = ""  # this is tiktok cookie, you can get it from browser devtools
 COOKIE_WEIBO = ""  # this is weibo cookie, you can get it from browser devtools
@@ -43,6 +47,10 @@ def time_stamp():
     str_time = time.strftime('%Y-%m-%d %H:%M:%S', local_time)
     return str_time
 
+def file_writer(filename, data):
+    with open(filename, 'a', encoding='utf-8') as file:
+        file.write(data + '\n')
+
 def weibo():
     try:
         time.sleep(random.randint(10, 20))  # 随机等待10到20秒
@@ -70,7 +78,6 @@ def weibo():
         print(user_info)
         user_info_tuple = (likes_received_all, comments_received, likes_received, followers_count, friends_count, statuses_count, str_time)
         use_info_db = database.search_weibo()
-        # print(user_info_tuple[:-1], use_info_db[1:-1])
         if user_info_tuple[:-1] == use_info_db[1:-1]:
             print("weibo数据未变化，跳过写入")
         else:
@@ -78,8 +85,8 @@ def weibo():
             print("weibo数据已更新，写入数据库", user_info_tuple)
             Email.send_email(subject="微博用户信息更新", content=user_info)
 
-        with open('weibo_user_info.txt', 'a', encoding='utf-8') as f:
-            f.write(user_info + '\n')
+        filename = FILE_PATH + FILE_WEIBO_USER_INFO
+        file_writer(filename, user_info)
     except (requests.RequestException, json.JSONDecodeError) as e:
         print("请求或解析失败:", e)
         Email.send_email(subject="微博请求或解析失败", content=str(e))
@@ -119,8 +126,8 @@ def tiktok():
             print("tiktok数据已更新，写入数据库", user_info_tuple)
             Email.send_email(subject="TikTok用户信息更新", content=user_info)
  
-        with open('tiktok_user_info.txt', 'a', encoding='utf-8') as f:
-            f.write(user_info + '\n')
+        filename = FILE_PATH + FILE_TIKTOK_USER_INFO
+        file_writer(filename, user_info)
     except (requests.RequestException, json.JSONDecodeError, KeyError) as e:
         print("请求或解析失败:", e)
         Email.send_email(subject="TikTok请求或解析失败", content=str(e))
