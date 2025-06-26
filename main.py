@@ -4,11 +4,13 @@ import json
 import time
 from database import DataBase
 import Email
+import red
 
 
 FILE_PATH = ''  # this is the path where you want to save the file
 FILE_TIKTOK_USER_INFO = 'tiktok_user_info.txt'
 FILE_WEIBO_USER_INFO = 'weibo_user_info.txt'
+FILE_RED_USER_INFO = 'red_user_info.txt'
 
 USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36 Edg/136.0.0.0"
 COOKIE_TIKTOK = ""  # this is tiktok cookie, you can get it from browser devtools
@@ -134,6 +136,41 @@ def tiktok():
         exit()
 
 
+def get_red():
+    str_time = time_stamp()
+    file_name = FILE_PATH + FILE_RED_USER_INFO
+
+    red_info = red.get_red_user_info()
+    red_user_info_database = database.search_redbook()
+    if red_info is None:
+        print("小红书用户信息获取失败，跳过写入")
+        Email.send_email(subject="小红书用户信息获取失败", content="小红书用户信息获取失败，请检查网络连接或API是否正常。")
+        return
+    else:
+        red_user_info_request = (red_info["user_id"], red_info["nickname"], red_info["ip_location"], red_info["description"], 0, red_info["follows"], red_info["fans"], red_info["interaction"], str_time)
+        
+        red_user_info = "时间：{}\t账号：{}\t昵称：{}\t位置：{}\t签名：{}\t关注数：{}\t粉丝数：{}\t互动量：{}".format(
+                str_time,
+                red_info["user_id"],
+                red_info["nickname"],
+                red_info["ip_location"],
+                red_info["description"],
+                red_info["follows"],
+                red_info["fans"],
+                red_info["interaction"]
+            )
+        print("小红书用户信息：", red_user_info)
+        if red_user_info_database[1:-1] == red_user_info_request[:-1]:
+            print("小红书数据未变化，跳过写入")
+        else:
+            print("red数据库信息： ", red_user_info_database[1:-1])
+            print("red请求信息： ", red_user_info_request[:-1])
+            database.insert_redbook(red_user_info)
+            Email.send_email(subject="小红书用户信息更新", content=red_user_info)
+            file_writer(file_name, "数据改变    " + red_user_info)
+
+
 if __name__ == "__main__":
     tiktok()
     weibo()
+    get_red()
