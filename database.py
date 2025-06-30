@@ -1,7 +1,16 @@
 import pymysql
 
 
-class DataBase:        
+class DataBase:
+
+    _instance = None
+
+    def __new__(cls, *args, **kwargs):
+        if not hasattr(cls, "_instance") or cls._instance is None:
+            cls._instance = super().__new__(cls)
+            cls._instance.__init__()
+        return cls._instance
+
     connection = pymysql.connect(
         host='localhost',
         user='root',
@@ -9,7 +18,9 @@ class DataBase:
         database='tiktok',  # replace with your database name
         charset='utf8mb4',
     )
+
     cursor = connection.cursor()
+
     def __init__(self):
         self.cursor = DataBase.cursor
         self.connection = DataBase.connection
@@ -18,11 +29,19 @@ class DataBase:
         self.cursor.close()
         self.connection.close()
 
+    def return_diction(self, results):
+        if results is None:
+            return None
+        else:
+            columns = [col[0] for col in self.cursor.description]
+            results = dict(zip(columns, results))
+            return results
 
     def search_tiktok(self):
         sql = "SELECT * FROM tiktok order by id desc limit 1"  # replace with your table name
         self.cursor.execute(sql)
         results = self.cursor.fetchone()  # get last row data
+        results = self.return_diction(results)
         return results  # return last row data
 
     def search_weibo(self):
