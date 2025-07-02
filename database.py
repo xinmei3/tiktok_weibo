@@ -15,7 +15,7 @@ class DataBase:
         host='localhost',
         user='root',
         password='root',  # replace with your database password
-        database='tiktok',  # replace with your database name
+        database='database_name',  # replace with your database name
         charset='utf8mb4',
     )
 
@@ -67,5 +67,4 @@ if __name__ == "__main__":
     database = DataBase()  # 创建数据库连接实例
 
     last_row = database.search_tiktok()  # 获取最后一行数据
-    new_tuple = last_row[1:-1]
     print(last_row)
