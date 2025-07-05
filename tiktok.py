@@ -56,14 +56,11 @@ def get_tiktok_user_info():
 
 if __name__ == "__main__":
     user_info = get_tiktok_user_info()
-    if user_info:
-        print("昵称:", user_info['nickname'])
-        print("抖音号:", user_info['unique_id'])
-        print("粉丝数:", user_info['follower_count'])
-        print("关注数:", user_info['following_count'])
-        print("获赞数:", user_info['total_favorited'])
-        print("作品数:", user_info['aweme_count'])
-        print("喜欢作品数:", user_info['favoriting_count'])
-        print("签名:", user_info['signature'])
-    else:
-        print("未能获取到用户信息。")
+    print("昵称:", user_info['nickname'])
+    print("抖音号:", user_info['unique_id'])
+    print("粉丝数:", user_info['follower_count'])
+    print("关注数:", user_info['following_count'])
+    print("获赞数:", user_info['total_favorited'])
+    print("作品数:", user_info['aweme_count'])
+    print("喜欢作品数:", user_info['favoriting_count'])
+    print("签名:", user_info['signature'])
