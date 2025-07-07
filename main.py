@@ -4,7 +4,7 @@ import json
 import time
 from database import DataBase
 import Email
-import red
+import tiktok_weibo.module.red as red
 
 
 FILE_PATH = ''  # this is the path where you want to save the file
