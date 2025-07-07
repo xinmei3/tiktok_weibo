@@ -3,8 +3,8 @@ import json
 import pprint
 import time
 
-
-url_tiktok_work = "https://www.douyin.com/aweme/v1/web/aweme/post/?device_platform=webapp&aid=6383&channel=channel_pc_web&sec_user_id=MS4wLjABAAAAWxLpO0Q437qGFpnEKBIIaU5-xOj2yAhH3MNJi-AUY04&max_cursor=0&locate_query=false&show_live_replay_strategy=1&need_time_list=1&time_list_query=0&whale_cut_token=&cut_version=1&count=18&publish_video_strategy_type=2&from_user_page=1&update_version_code=170400&pc_client_type=1&pc_libra_divert=Windows&support_h265=1&support_dash=1&cpu_core_num=12&version_code=290100&version_name=29.1.0&cookie_enabled=true&screen_width=2560&screen_height=1440&browser_language=zh-CN&browser_platform=Win32&browser_name=Edge&browser_version=138.0.0.0&browser_online=true&engine_name=Blink&engine_version=138.0.0.0&os_name=Windows&os_version=10&device_memory=8&platform=PC&downlink=10&effective_type=4g&round_trip_time=50&webid=7421552512153306650&uifid=edf0d417f427c69b9e8dcf334ec311738f5d7ef487ab7a4043d6c18231e232a4109a12adc1c3f7f26fa2b018a176235714142f663feeb21098188bf4013ef366563741f139de2078c9fe5c5a9e16e2b0c7d1fa1e6624a6be9bdcdcb270eaa660f92d81e5155ac350e039912a6ddffd03617a15174e734d88135a7a0ab96909e4333c0f699250832af144f04604d513c7b0a65888de3d30b6af5a78714ceff2af&verifyFp=verify_mbs1oaak_WY03Wp9U_cfBg_4bEJ_Aei1_JI2G1u9OeiAN&fp=verify_mbs1oaak_WY03Wp9U_cfBg_4bEJ_Aei1_JI2G1u9OeiAN&msToken=4O4w2w-pJgwc5Ct7IuPnETcbrGEIaIAgzP0urNGDdWl-8nFTWIUUIBZiUPccHQcX_KxkYIxHYMvdQspozxJaATfE8KaL_nQei71-UhE3mbuPKkBLC2I-9OyOEE4kHk-rqFZF7nVda-tds_W3SzRku_P4yds6FDOeqf6SuUHY44MVuXQDDK3yuDGppA%3D%3D&a_bogus=QX4fkz7ExdRROdKSYOGC9G1lCMg%2FrPuyClTdbj1TCOOPGXUcYmNbhPbaGxFBsZ%2FyuWBkkqVHiDMlbxxcQtUhZoHkFmpfu2JSO4A5nU6o2qNhYUXkgqR%2FCw8w9JtG8QvEuAKRJARUUtmOID%2F4gZrsUp5yyAkE4mkpQHa6dc4GT9ek60s9PHqduxbdi7FCU1I6&x-secsdk-web-expire=1751732148739&x-secsdk-web-signature=46afc14d283e97e7878de7771e4d5acb"
+# TikTok video URL
+url_tiktok_work = "https://www.douyin.com/aweme/v1/web/aweme/post/?device_platform=webapp&aid=6383&channel=channel_pc_web&sec_user_id=MS4wLjABAAAAWxLpO0Q437qGFpnEKBIIaU5-xOj2yAhH3MNJi-AUY04&max_cursor=0&locate_item_id=7522312742071618850&locate_query=false&show_live_replay_strategy=1&need_time_list=1&time_list_query=0&whale_cut_token=&cut_version=1&count=18&publish_video_strategy_type=2&from_user_page=1&update_version_code=170400&pc_client_type=1&pc_libra_divert=Windows&support_h265=1&support_dash=1&cpu_core_num=12&version_code=290100&version_name=29.1.0&cookie_enabled=true&screen_width=2560&screen_height=1440&browser_language=zh-CN&browser_platform=Win32&browser_name=Edge&browser_version=138.0.0.0&browser_online=true&engine_name=Blink&engine_version=138.0.0.0&os_name=Windows&os_version=10&device_memory=8&platform=PC&downlink=10&effective_type=4g&round_trip_time=50&webid=7421552512153306650&uifid=edf0d417f427c69b9e8dcf334ec311738f5d7ef487ab7a4043d6c18231e232a4109a12adc1c3f7f26fa2b018a176235714142f663feeb21098188bf4013ef366563741f139de2078c9fe5c5a9e16e2b0c7d1fa1e6624a6be9bdcdcb270eaa660f92d81e5155ac350e039912a6ddffd03617a15174e734d88135a7a0ab96909e4333c0f699250832af144f04604d513c7b0a65888de3d30b6af5a78714ceff2af&verifyFp=verify_mbs1oaak_WY03Wp9U_cfBg_4bEJ_Aei1_JI2G1u9OeiAN&fp=verify_mbs1oaak_WY03Wp9U_cfBg_4bEJ_Aei1_JI2G1u9OeiAN&msToken=bWxeL6gWAc8YIm0Y_wAHzJqra8n_e3V-0ENcUpnKC3cHoUGayKKTMZ8PPYpVyKeNOyHcr5s9mH8I_d2w-Wm9CVqndp-WuPcM3mOUjrEc97ofy9oePnNx20ZRSlKLfDCQjn3dKNtcRAM_0YF6NuiBw2nsdZAaTabh_qh4JQr1Ii1Q&a_bogus=QjUjkHWydd%2FfKdMSYKJn99lUaeElrTWyFPioRP1TyPK-TXMOybPyhrb2Jxq5sgVRZbBThK3HND0lYxxcQzXsZonkwmkfSZwjwzA99WfLgqq6YtwkgNf2Cz8wyJeTWYJEuAKyJAWUAtmOIdA4D3ahUB-yeApEsQvpKqr6daUGY9tv6Fs9MqFOuxbDE7tqDf%3D%3D&x-secsdk-web-expire=1751900633319&x-secsdk-web-signature=11541845b0130bf353f7937ee0c5a2c6"
 
 headers_tiktok = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36 Edg/137.0.0.0",
@@ -18,19 +18,26 @@ headers_tiktok = {
 
 def get_tiktok_video_info():
     response = requests.get(url_tiktok_work, headers=headers_tiktok)
-    response_json = json.loads(response.text)
+    if response.status_code != 200:
+        print("Error fetching TikTok video information:", response.status_code)
+        return []
+    try:
+        response_json = json.loads(response.text)
+    except json.JSONDecodeError:
+        print("Error decoding JSON response from TikTok.")
+        return []
+    
+    video_list = response_json.get("aweme_list", [])
 
-    work_list = response_json.get("aweme_list", [])
-
-    work_list_final = []
-    for work in work_list:
-        video_id = work.get('aweme_id')
-        video_title = work.get('desc')
-        video_comment_count = work.get('statistics', {}).get('comment_count', 0)
-        video_like_count = work.get('statistics', {}).get('digg_count', 0)
-        video_share_count = work.get('statistics', {}).get('share_count', 0)
-        video_create_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(work.get('create_time')))
-        video_url = work.get('video', {}).get('play_addr', {}).get('url_list', [])[0]
+    video_list_final = []
+    for video in video_list:
+        video_id = video.get('aweme_id')
+        video_title = video.get('desc')
+        video_comment_count = video.get('statistics', {}).get('comment_count', 0)
+        video_like_count = video.get('statistics', {}).get('digg_count', 0)
+        video_share_count = video.get('statistics', {}).get('share_count', 0)
+        video_create_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(video.get('create_time')))
+        video_url = video.get('video', {}).get('play_addr', {}).get('url_list', [])[0]
 
         video_info = {
             "视频_id": video_id,
@@ -41,13 +48,14 @@ def get_tiktok_video_info():
             "创建时间": video_create_time,
             "视频地址": video_url
         }
-        work_list_final.append(video_info)
+        video_list_final.append(video_info)
 
-    return work_list_final
+    return video_list_final
 
 
 if __name__ == "__main__":
     video_info = get_tiktok_video_info()
-    print("TikTok Video Information:")
+    print("TikTok first 18 Video Information:")
     pprint.pprint(video_info)
+    print(len(video_info), "videos found.")
 
