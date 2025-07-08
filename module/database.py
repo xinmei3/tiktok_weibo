@@ -1,7 +1,7 @@
 import pymysql
 
 
-class Database:
+class DataBase:
     connection = pymysql.connect(
         host='localhost',
         user='root',
@@ -11,8 +11,8 @@ class Database:
     )
     cursor = connection.cursor()
     def __init__(self):
-        self.cursor = Database.cursor
-        self.connection = Database.connection
+        self.cursor = DataBase.cursor
+        self.connection = DataBase.connection
 
     def __del__(self):
         self.cursor.close()
@@ -31,7 +31,7 @@ class Database:
         self.cursor.execute(sql)
         results = self.cursor.fetchone()  # 获取最后一行数据
 
-        results_dict = Database.__return_diction(self, results)  # 将结果转换为字典形式
+        results_dict = DataBase.__return_diction(self, results)  # 将结果转换为字典形式
 
         return results, results_dict
 
@@ -40,7 +40,7 @@ class Database:
         self.cursor.execute(sql)
         results = self.cursor.fetchone()  # 获取最后一行数据
 
-        results_dict = Database.__return_diction(self, results)  # 将结果转换为字典形式
+        results_dict = DataBase.__return_diction(self, results)  # 将结果转换为字典形式
 
         return results, results_dict
 
@@ -49,7 +49,7 @@ class Database:
         self.cursor.execute(sql)
         results = self.cursor.fetchone()  # 获取最后一行数据
 
-        results_dict = Database.__return_diction(self, results)  # 将结果转换为字典形式
+        results_dict = DataBase.__return_diction(self, results)  # 将结果转换为字典形式
 
         return results, results_dict 
 
@@ -76,7 +76,7 @@ class Database:
 
 if __name__ == "__main__":
         # 测试代码
-    database = Database()  # 创建数据库连接实例
+    database = DataBase()  # 创建数据库连接实例
 
     last_row, last_row_dict = database.search_tiktok()  # 获取最后一行数据
     # new_tuple = last_row[1:-1]
