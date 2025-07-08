@@ -4,7 +4,7 @@ import json
 import time
 from database import DataBase
 import Email
-import tiktok_weibo.module.red as red
+import module.red as red
 
 
 FILE_PATH = ''  # this is the path where you want to save the file
@@ -136,7 +136,7 @@ def tiktok():
         exit()
 
 
-def get_red():
+def check_red():
     str_time = time_stamp()
     file_name = FILE_PATH + FILE_RED_USER_INFO
 
@@ -173,4 +173,4 @@ def get_red():
 if __name__ == "__main__":
     tiktok()
     weibo()
-    get_red()
+    check_red()
