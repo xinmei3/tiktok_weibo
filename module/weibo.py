@@ -1,6 +1,7 @@
 import json
 import requests
 from pprint import pprint
+from requests_common import RequestsCommon
 
 
 REFERER_WEIBO = "https://weibo.com/"
@@ -9,7 +10,7 @@ CONNECTION_KEEP_ALIVE = "keep-alive"
 
 HEADERS_WEIBO = {
     "User-Agent": USER_AGENT,
-    "Cookie": "SINAGLOBAL=5172920912928.578.1727964718316; XSRF-TOKEN=CXWIsRLWyXTPlRSJRqWCRCwL; _s_tentry=weibo.com; Apache=5392044330354.525.1751900668418; ULV=1751900668471:60:4:1:5392044330354.525.1751900668418:1751697578435; WBPSESS=CtdwwwCyKWEc2EnGhvgdz08FSQGbJtHve5paM47jkDgYO1BS7ihKbRXsJFBLAyPc37-IJ9ospXhFNwS6Y6TjGA9B51Lx9aGvQZAufuM7jvMTS2FXj558hczGbQLCcA7bPVfpj7udtI9tkiu8phcS2Q==; PC_TOKEN=770f04c11b; ALF=1754493293; SUB=_2A25Fb5Q9DeRhGeVP7FMW8i3Pzj6IHXVmBKn1rDV8PUJbkNANLUntkW1NTPTpcwJUAid-Jz2YBzGWqmy2DFb59cUN; SUBP=0033WrSXqPxfM725Ws9jqgMF55529P9D9WW4VRKkCD0umBECsWzgziLV5JpX5KMhUgL.FoepS02Neoe0SKz2dJLoIpfki--fiKnNiKL2i--Ni-2Ei-2Ni--ci-zpi-27P7tt",
+    "Cookie": "SINAGLOBAL=5172920912928.578.1727964718316; SUBP=0033WrSXqPxfM725Ws9jqgMF55529P9D9WW4VRKkCD0umBECsWzgziLV5JpX5KMhUgL.FoepS02Neoe0SKz2dJLoIpfki--fiKnNiKL2i--Ni-2Ei-2Ni--ci-zpi-27P7tt; ULV=1752159289522:61:5:2:3236626450464.7324.1752159289465:1751900668471; XSRF-TOKEN=v4SCoDe0QCZBjymGVQPm5ufa; ALF=1755099333; SUB=_2A25FcVOVDeRhGeVP7FMW8i3Pzj6IHXVmD-ldrDV8PUJbkNANLXnakW1NTPTpcyxcgQ-Y-9pFDDNPYQbnooCoArUf; WBPSESS=CtdwwwCyKWEc2EnGhvgdz08FSQGbJtHve5paM47jkDgYO1BS7ihKbRXsJFBLAyPc7gHemAIToB7gCziEy7Sh9jtKOPTPoZMQ0xZyHpOOz_Q4aIeeqg-AZ_BUWACy3uTEd88wxfMye9G92nX8rh4xiw==",
     "Referer": REFERER_WEIBO,
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
     "Accept-Language": "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6",
@@ -18,6 +19,8 @@ HEADERS_WEIBO = {
 
 USER_ID = "1669879400"
 URL_WEIBO_HOME = "https://weibo.com/ajax/profile/info?uid=1669879400"
+
+request_common = RequestsCommon()
 
 class getWeiboInfo:
     def __init__(self):
@@ -28,46 +31,32 @@ class getWeiboInfo:
     
     def get_fans_data(self, user_id):
         url = "https://weibo.com/ajax/friendships/friends?relate=fans&page={}&uid={}&type=all&newFollowerCount=0"
-        user_id = USER_ID
-        response = requests.get(url.format(1, user_id), headers=HEADERS_WEIBO)
-        response_json = json.loads(response.text)
+
+        response_json = request_common.return_json(url.format(1, user_id), headers=HEADERS_WEIBO)
+
         fans_info = response_json['users']            # 获取第一页的粉丝列表
         fans_count = response_json['total_number']    # 获取总粉丝数
         for num in range(2, (fans_count // 20) + 2):
-            response = requests.get(url.format(num, user_id), headers=HEADERS_WEIBO)
-            response_json = json.loads(response.text)
+            response_json = request_common.return_json(url.format(num, user_id), headers=HEADERS_WEIBO)
             fans_info.extend(response_json['users'])
 
         return fans_info, fans_count
 
     def get_follower_data(self, user_id):
         url = "https://weibo.com/ajax/friendships/friends?page={}&uid={}"
-        user_id = USER_ID
-        response = requests.get(url.format(1, user_id), headers=HEADERS_WEIBO)
-        response_json = json.loads(response.text)
+
+        response_json = request_common.return_json(url.format(1, user_id), headers=HEADERS_WEIBO)
+
         followers_info = response_json['users']            # 获取第一页的关注列表
         followers_count = response_json['total_number']    # 获取总关注数
         for num in range(2, (followers_count // 20) + 2):
-            response = requests.get(url.format(num, user_id), headers=HEADERS_WEIBO)
-            response_json = json.loads(response.text)
+            response_json = request_common.return_json(url.format(num, user_id), headers=HEADERS_WEIBO)
             followers_info.extend(response_json['users'])
 
         return followers_info, followers_count
 
     def get_weibo_user_info(self):
-        response = requests.get(URL_WEIBO_HOME, headers=HEADERS_WEIBO)
-        if response.status_code != 200:
-            print(f"获取用户信息失败，状态码: {response.status_code}")
-            return None
-        if not response.text:
-            print("获取用户信息失败，响应内容为空")
-            return None
-
-        try:
-            response_json = json.loads(response.text)
-        except json.JSONDecodeError:
-            print("获取用户信息失败，JSON解析错误")
-            return None
+        response_json = request_common.return_json(URL_WEIBO_HOME, headers=HEADERS_WEIBO)
 
         weibo_info_xiang = response_json['data']['user']
         nickname = weibo_info_xiang["screen_name"]                                             # 昵称
@@ -95,8 +84,6 @@ class getWeiboInfo:
 if __name__ == "__main__":
     weibo_info = getWeiboInfo()
     user_info = weibo_info.get_weibo_user_info()
-    follower_data, followers_count = weibo_info.get_follower_data(USER_ID)
-    # fans_data, followers_count = weibo_info.get_fans_data(USER_ID)
     if user_info:
         print(f"昵称: {user_info['昵称']}")
         print(f"简介: {user_info['简介']}")
@@ -110,5 +97,7 @@ if __name__ == "__main__":
         print("未能获取用户信息")
     # with open('weibo_user_follower_info.json', 'w', encoding='utf-8') as f:
     #     json.dump(follower_data, f, ensure_ascii=False, indent=4)
-    for idx, item in enumerate(follower_data):
+    follower_data, followers_count = weibo_info.get_follower_data(USER_ID)
+    fans_data, followers_count = weibo_info.get_fans_data(USER_ID)
+    for idx, item in enumerate(fans_data):
         print(f"{idx}, 昵称: {item['screen_name']}, \t主页链接: https://weibo.com/u/{item['id']}, 关注数: {item['followers_count']}, 粉丝数: {item['friends_count']}")
